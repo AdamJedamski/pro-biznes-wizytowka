@@ -38,7 +38,7 @@ export const Contact = () => {
       `Wiadomość:\n${formData.message}`
     );
     
-    window.location.href = `mailto:kontakt@konteneryfirma.pl?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:blackgranny1906@gmail.com?subject=${subject}&body=${body}`;
     
     toast({
       title: "Przekierowanie do programu pocztowego",
@@ -160,10 +160,10 @@ export const Contact = () => {
                 <div>
                   <h3 className="font-semibold text-lg mb-1">Email</h3>
                   <a 
-                    href="mailto:kontakt@konteneryfirma.pl" 
+                    href="mailto:blackgranny1906@gmail.com" 
                     className="text-primary-foreground/90 hover:text-primary-foreground transition-colors"
                   >
-                    kontakt@konteneryfirma.pl
+                    blackgranny1906@gmail.com
                   </a>
                   <p className="text-sm text-primary-foreground/70 mt-1">
                     Odpowiadamy w ciągu 24h
