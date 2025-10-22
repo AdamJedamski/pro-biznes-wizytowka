@@ -8,16 +8,7 @@ export const Hero = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      <div 
-        className="absolute inset-0 z-0"
-        style={{
-          backgroundImage: `linear-gradient(to right, hsl(215 95% 15% / 0.95), hsl(215 95% 20% / 0.85)), url(${heroImage})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      />
-      
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-primary via-primary/95 to-primary/90">
       <div className="container mx-auto px-4 z-10 relative">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="space-y-6 animate-fade-in">
@@ -50,6 +41,17 @@ export const Hero = () => {
                   +48 123 456 789
                 </a>
               </Button>
+            </div>
+          </div>
+          
+          <div className="hidden md:flex justify-center items-center animate-fade-in">
+            <div className="relative">
+              <div className="absolute inset-0 bg-secondary/20 blur-3xl rounded-full"></div>
+              <img 
+                src={heroImage} 
+                alt="Profesjonalna obsługa kontenerów" 
+                className="relative w-80 h-80 object-cover rounded-2xl shadow-2xl border-4 border-primary-foreground/10"
+              />
             </div>
           </div>
         </div>
