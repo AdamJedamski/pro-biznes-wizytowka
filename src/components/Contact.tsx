@@ -6,9 +6,11 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Contact = () => {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,7 +18,7 @@ export const Contact = () => {
     message: ""
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     // Validation
@@ -29,29 +31,42 @@ export const Contact = () => {
       return;
     }
 
-    // Create mailto link
-    const subject = encodeURIComponent(`Zapytanie od ${formData.name}`);
-    const body = encodeURIComponent(
-      `Imię i nazwisko: ${formData.name}\n` +
-      `Email: ${formData.email}\n` +
-      `Telefon: ${formData.phone}\n\n` +
-      `Wiadomość:\n${formData.message}`
-    );
-    
-    window.location.href = `mailto:blackgranny1906@gmail.com?subject=${subject}&body=${body}`;
-    
-    toast({
-      title: "Przekierowanie do programu pocztowego",
-      description: "Wiadomość została przygotowana w Twoim programie pocztowym.",
-    });
+    setIsSubmitting(true);
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      message: ""
-    });
+    try {
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          message: formData.message
+        }
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Wysłano!",
+        description: "Twoja wiadomość została wysłana. Odezwiemy się wkrótce!",
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        message: ""
+      });
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: "Błąd",
+        description: "Nie udało się wysłać wiadomości. Spróbuj ponownie.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -124,9 +139,10 @@ export const Contact = () => {
                 size="lg" 
                 variant="cta"
                 className="w-full"
+                disabled={isSubmitting}
               >
                 <Mail className="mr-2 h-5 w-5" />
-                Wyślij wiadomość
+                {isSubmitting ? "Wysyłanie..." : "Wyślij wiadomość"}
               </Button>
             </form>
           </Card>
